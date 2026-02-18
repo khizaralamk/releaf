@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { COLORS } from '../../constants/styles/COLORS';
 import { SIZINGS } from '../../constants/sizings/SIZINGS';
 import { Fonts } from '../../styles/fonts/fonts';
@@ -37,17 +37,17 @@ export const BreathingCircle: React.FC<BreathingCircleProps> = ({
           }),
           Animated.timing(middleScale, {
             toValue: 1.1,
-            duration: 3500,
+            duration: 1500,
             useNativeDriver: true,
           }),
           Animated.timing(outerOpacity, {
             toValue: 0.8,
-            duration: 3500,
+            duration: 1500,
             useNativeDriver: true,
           }),
           Animated.timing(middleOpacity, {
             toValue: 1,
-            duration: 3500,
+            duration: 1500,
             useNativeDriver: true,
           }),
         ]),
@@ -55,22 +55,22 @@ export const BreathingCircle: React.FC<BreathingCircleProps> = ({
         Animated.parallel([
           Animated.timing(outerScale, {
             toValue: 1,
-            duration: 3500,
+            duration: 1500,
             useNativeDriver: true,
           }),
           Animated.timing(middleScale, {
             toValue: 1,
-            duration: 3500,
+            duration: 1500,
             useNativeDriver: true,
           }),
           Animated.timing(outerOpacity, {
             toValue: 0.6,
-            duration: 3500,
+            duration: 1500,
             useNativeDriver: true,
           }),
           Animated.timing(middleOpacity, {
             toValue: 0.8,
-            duration: 3500,
+            duration: 1500,
             useNativeDriver: true,
           }),
         ]),
@@ -83,7 +83,10 @@ export const BreathingCircle: React.FC<BreathingCircleProps> = ({
   }, [outerScale, middleScale, outerOpacity, middleOpacity]);
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onPress}
+      activeOpacity={0.9}>
       {/* Outer circle with breathing animation */}
       <Animated.Image
         source={poly4}
@@ -110,15 +113,12 @@ export const BreathingCircle: React.FC<BreathingCircleProps> = ({
         resizeMode="contain"
       />
 
-      {/* Start button */}
-      <TouchableOpacity
-        style={styles.startButton}
-        onPress={onPress}
-        activeOpacity={0.8}>
+      {/* Center text */}
+      <View style={styles.startButton}>
         <Text style={styles.startText}>Start</Text>
-        <Text style={styles.sessionText}>Box Breathing</Text>
-      </TouchableOpacity>
-    </View>
+        <Text style={styles.sessionText}>60 secs</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 

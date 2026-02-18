@@ -10,7 +10,12 @@ const Stack = createNativeStackNavigator();
 
 const HomeStackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation: 'slide_from_right',
+        animationDuration: 250,
+      }}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="AllTechniques" component={AllTechniquesScreen} />
       <Stack.Screen name="TechniqueDetail" component={TechniqueDetailScreen} />

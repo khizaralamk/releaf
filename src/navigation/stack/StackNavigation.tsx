@@ -11,7 +11,12 @@ import BottomTabNavigation from '../bottom/BottomTabNavigation';
 const StackNavigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          animation: 'slide_from_right',
+          animationDuration: 250,
+        }}>
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen 
           name="Onboarding1" 

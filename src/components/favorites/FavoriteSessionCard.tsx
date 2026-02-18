@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { HeartIcon } from 'react-native-heroicons/outline';
+import { HeartIcon as HeartSolidIcon, PlayIcon } from 'react-native-heroicons/solid';
 import { COLORS } from '../../constants/styles/COLORS';
-import { SIZINGS } from '../../constants/sizings/SIZINGS';
 import { Fonts } from '../../styles/fonts/fonts';
 
 interface FavoriteSessionCardProps {
@@ -23,31 +24,26 @@ export const FavoriteSessionCard: React.FC<FavoriteSessionCardProps> = ({
 }) => {
   return (
     <View style={styles.card}>
-      <View style={styles.content}>
-        <View style={styles.info}>
-          <Text style={styles.name}>{name}</Text>
-          <View style={styles.meta}>
-            <Text style={styles.metaText}>{duration} min</Text>
-            <View style={styles.dot} />
-            <Text style={styles.metaText}>{sessions} sessions</Text>
-          </View>
+      <View style={styles.left}>
+        <Text style={styles.name} numberOfLines={1}>{name}</Text>
+        <View style={styles.meta}>
+          <Text style={styles.metaText}>{duration} min</Text>
+          <View style={styles.dot} />
+          <Text style={styles.metaText}>{sessions} {sessions === 1 ? 'session' : 'sessions'}</Text>
         </View>
+      </View>
 
-        <View style={styles.actions}>
-          <TouchableOpacity
-            style={styles.favoriteButton}
-            onPress={onToggleFavorite}
-            activeOpacity={0.7}>
-            <Text style={styles.favoriteIcon}>{isFavorite ? '♥' : '♡'}</Text>
-          </TouchableOpacity>
+      <View style={styles.actions}>
+        <TouchableOpacity onPress={onToggleFavorite} activeOpacity={0.7} style={styles.iconBtn}>
+          {isFavorite
+            ? <HeartSolidIcon size={18} color={COLORS.colors.primary} />
+            : <HeartIcon size={18} color={COLORS.colors.gray_400} />
+          }
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.playButton}
-            onPress={onPlay}
-            activeOpacity={0.7}>
-            <Text style={styles.playIcon}>▶</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={onPlay} activeOpacity={0.7} style={styles.playBtn}>
+          <PlayIcon size={16} color={COLORS.colors.background} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -55,76 +51,61 @@ export const FavoriteSessionCard: React.FC<FavoriteSessionCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.colors.surface,
-    borderRadius: 16,
-    marginBottom: SIZINGS.spacing.md,
-    borderWidth: 1.5,
-    borderColor: COLORS.colors.border,
-    overflow: 'hidden',
-  },
-  content: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: SIZINGS.spacing.lg,
+    backgroundColor: COLORS.colors.card,
+    borderRadius: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 10,
   },
-  info: {
+  left: {
     flex: 1,
+    gap: 5,
   },
   name: {
-    fontSize: 17,
+    fontSize: 15,
     fontFamily: Fonts.dmsans.semibold,
     color: COLORS.colors.text,
     letterSpacing: -0.3,
-    marginBottom: 6,
   },
   meta: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   metaText: {
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: Fonts.dmsans.regular,
     color: COLORS.colors.textSecondary,
-    letterSpacing: -0.2,
   },
   dot: {
     width: 3,
     height: 3,
-    borderRadius: 1.5,
+    borderRadius: 2,
     backgroundColor: COLORS.colors.gray_400,
-    marginHorizontal: 8,
+    marginHorizontal: 7,
   },
   actions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
   },
-  favoriteButton: {
+  iconBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: COLORS.colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  playBtn: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1.5,
-    borderColor: COLORS.colors.border,
-  },
-  favoriteIcon: {
-    fontSize: 18,
-    color: COLORS.colors.primary,
-  },
-  playButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
     backgroundColor: COLORS.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  playIcon: {
-    fontSize: 16,
-    color: COLORS.colors.white,
-    marginLeft: 2,
+    paddingLeft: 2,
   },
 });

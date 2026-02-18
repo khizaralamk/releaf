@@ -1,26 +1,24 @@
 import React from 'react';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { HomeIcon, HeartIcon, ChartBarIcon, Cog6ToothIcon } from 'react-native-heroicons/outline';
-import { HomeIcon as HomeSolidIcon, HeartIcon as HeartSolidIcon, ChartBarIcon as ChartBarSolidIcon, Cog6ToothIcon as Cog6ToothSolidIcon } from 'react-native-heroicons/solid';
+import { HomeIcon, HeartIcon, ChartBarIcon, Cog6ToothIcon, BookOpenIcon } from 'react-native-heroicons/outline';
+import { HomeIcon as HomeSolidIcon, HeartIcon as HeartSolidIcon, ChartBarIcon as ChartBarSolidIcon, Cog6ToothIcon as Cog6ToothSolidIcon, BookOpenIcon as BookOpenSolidIcon } from 'react-native-heroicons/solid';
 import { Tab } from '../../utils/Util';
 import HomeStackNavigator from '../stack/HomeStackNavigator';
 import FavoritesScreen from '../../screens/favorites/FavoritesScreen';
 import AnalyticsScreen from '../../screens/analytics/AnalyticsScreen';
 import SettingsScreen from '../../screens/settings/SettingsScreen';
+import JournalScreen from '../../screens/journal/JournalScreen';
 import { CustomTabBar } from '../../components/navigation/CustomTabBar';
 
 const BottomTabNavigation = () => {
   return (
     <Tab.Navigator
       tabBar={(props) => {
-        // Get the current route name from the Home stack
         const homeRoute = props.state.routes.find((route) => route.name === 'Home');
         const routeName = homeRoute ? getFocusedRouteNameFromRoute(homeRoute) ?? 'Home' : 'Home';
 
-        // Hide tab bar on sub-screens
         const hideTabBar = ['AllTechniques', 'TechniqueDetail', 'BreathingSession', 'Pricing'].includes(routeName);
 
-        // Return null to hide the tab bar, otherwise render CustomTabBar
         if (hideTabBar) {
           return null;
         }
@@ -29,6 +27,7 @@ const BottomTabNavigation = () => {
       }}
       screenOptions={{
         headerShown: false,
+        animation: 'none',
       }}>
       <Tab.Screen
         name="Home"
@@ -52,6 +51,19 @@ const BottomTabNavigation = () => {
               <HeartSolidIcon color={color} size={22} />
             ) : (
               <HeartIcon color={color} size={22} />
+            ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Journal"
+        component={JournalScreen}
+        options={{
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <BookOpenSolidIcon color={color} size={22} />
+            ) : (
+              <BookOpenIcon color={color} size={22} />
             ),
         }}
       />

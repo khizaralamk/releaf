@@ -16,7 +16,6 @@ const FavoritesScreen = () => {
   const { favorites, toggleFavorite, refreshFavorites } = useFavorites();
   const { frequentTechniques, refreshFrequentTechniques } = useFrequentTechniques();
 
-  // Refresh data when screen comes into focus
   useFocusEffect(
     useCallback(() => {
       refreshFavorites();
@@ -25,7 +24,6 @@ const FavoritesScreen = () => {
     }, [])
   );
 
-  // Get favorited techniques
   const favoritedTechniques = BREATHING_TECHNIQUES.filter((tech) =>
     favorites.includes(tech.id)
   );
@@ -41,25 +39,25 @@ const FavoritesScreen = () => {
     await toggleFavorite(techniqueId);
   };
 
+  const isEmpty = frequentTechniques.length === 0 && favoritedTechniques.length === 0;
+
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
         <Text style={styles.title}>Favorites</Text>
+        <Text style={styles.subtitle}>Your saved techniques & sessions</Text>
       </View>
+
       <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}>
-        {/* Frequently Used Section */}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.scrollContent, isEmpty && styles.scrollEmpty]}>
+
         {frequentTechniques.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Frequently Used</Text>
             {frequentTechniques.map((usage) => {
-              const technique = BREATHING_TECHNIQUES.find(
-                (t) => t.id === usage.techniqueId
-              );
-              if (!technique) return null;
-
+              const technique = BREATHING_TECHNIQUES.find((t) => t.id === usage.techniqueId);
+              if (!technique) {return null;}
               return (
                 <FavoriteSessionCard
                   key={usage.techniqueId}
@@ -75,19 +73,15 @@ const FavoritesScreen = () => {
           </View>
         )}
 
-        {/* Saved Sessions Section */}
         {favoritedTechniques.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Saved Favorites</Text>
+            <Text style={styles.sectionTitle}>Saved</Text>
             {favoritedTechniques.map((technique) => {
-              const usage = frequentTechniques.find(
-                (u) => u.techniqueId === technique.id
-              );
-              const sessionCount = usage?.sessionCount || 0;
+              const usage = frequentTechniques.find((u) => u.techniqueId === technique.id);
+              const sessionCount = usage?.sessionCount ?? 0;
               const avgDuration = usage
                 ? Math.round(usage.totalMinutes / usage.sessionCount)
                 : 10;
-
               return (
                 <FavoriteSessionCard
                   key={technique.id}
@@ -103,13 +97,12 @@ const FavoritesScreen = () => {
           </View>
         )}
 
-        {/* Empty State */}
-        {frequentTechniques.length === 0 && favoritedTechniques.length === 0 && (
+        {isEmpty && (
           <View style={styles.emptyState}>
             <Text style={styles.emptyIcon}>♡</Text>
-            <Text style={styles.emptyTitle}>No favorites yet</Text>
+            <Text style={styles.emptyTitle}>Nothing saved yet</Text>
             <Text style={styles.emptyDescription}>
-              Tap the heart icon on any technique to save it here
+              Tap the heart on any technique to save it here
             </Text>
           </View>
         )}
@@ -124,8 +117,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.colors.background,
   },
   header: {
-    paddingVertical: SIZINGS.spacing.lg,
+    paddingTop: SIZINGS.spacing.md,
+    paddingBottom: SIZINGS.spacing.lg,
     paddingHorizontal: SIZINGS.spacing.xl,
+    gap: 4,
   },
   title: {
     fontSize: 28,
@@ -133,47 +128,52 @@ const styles = StyleSheet.create({
     color: COLORS.colors.text,
     letterSpacing: -0.8,
   },
-  scrollView: {
-    flex: 1,
+  subtitle: {
+    fontSize: 13,
+    fontFamily: Fonts.dmsans.regular,
+    color: COLORS.colors.textSecondary,
   },
   scrollContent: {
     paddingHorizontal: SIZINGS.spacing.xl,
-    paddingBottom: 100,
+    paddingBottom: 110,
+  },
+  scrollEmpty: {
+    flexGrow: 1,
   },
   section: {
     marginBottom: SIZINGS.spacing.xl,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontFamily: Fonts.dmsans.semibold,
-    color: COLORS.colors.text,
-    letterSpacing: -0.4,
+    fontSize: 13,
+    fontFamily: Fonts.dmsans.medium,
+    color: COLORS.colors.textSecondary,
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
     marginBottom: SIZINGS.spacing.md,
   },
   emptyState: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: SIZINGS.spacing.xxl * 2,
+    gap: 8,
   },
   emptyIcon: {
-    fontSize: 64,
+    fontSize: 52,
     color: COLORS.colors.textSecondary,
-    marginBottom: SIZINGS.spacing.md,
+    marginBottom: 4,
   },
   emptyTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: Fonts.dmsans.semibold,
     color: COLORS.colors.text,
     letterSpacing: -0.4,
-    marginBottom: SIZINGS.spacing.sm,
   },
   emptyDescription: {
-    fontSize: 15,
+    fontSize: 13,
     fontFamily: Fonts.dmsans.regular,
     color: COLORS.colors.textSecondary,
-    letterSpacing: -0.2,
     textAlign: 'center',
+    lineHeight: 20,
   },
 });
 
